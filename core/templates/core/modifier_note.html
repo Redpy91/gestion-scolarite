@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Modifier les notes{% endblock %}
+
+{% block content %}
+<div class="container mt-3" style="max-width: 480px">
+
+    <div class="card shadow">
+        <div class="card-header bg-warning text-dark text-center">
+            ✏️ Modifier les notes
+        </div>
+
+        <div class="card-body">
+            <p class="text-center mb-2">
+                <strong>{{ eleve.nom }} {{ eleve.prenom }}</strong><br>
+                {{ matiere.get_nom_display }}
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% for key, note in notes.items %}
+                <div class="mb-2">
+                    <label class="form-label small">{{ key }}</label>
+                    <input
+                        type="number"
+                        step="0.25"
+                        name="{{ key }}"
+                        class="form-control form-control-sm"
+                        value="{% if note %}{{ note.valeur }}{% endif %}"
+                    >
+                </div>
+                {% endfor %}
+
+                <div class="d-flex justify-content-between mt-3">
+                    <a href="{% url 'detail_eleve' eleve.id %}"
+                       class="btn btn-secondary btn-sm">
+                        Annuler
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success btn-sm">
+                        💾 Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Liste des élèves{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Élèves de la classe {{ classe.nom }}</h2>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+    <!-- Bouton AJOUTER ÉLÈVE -->
+    <a href="{% url 'ajouter_eleve' classe.id %}" class="btn btn-success">
+        ➕ Ajouter un élève
+    </a>
+</div>
+
+<!-- Bouton CLASSEMENT -->
+<a href="{% url 'classement_classe' classe.id %}" class="btn btn-primary mb-3">
+    📊 Voir le classement
+</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr class="text-center">
+            <th>N°</th>
+            <th>Matricule</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for eleve in eleves %}
+        <tr>
+            <td class="text-center">{{ forloop.counter }}</td>
+            <td>{{ eleve.matricule }}</td>
+            <td>{{ eleve.nom }}</td>
+            <td>{{ eleve.prenom }}</td>
+            
+            <td class="text-center">
+                <a href="{% url 'detail_eleve' eleve.id %}" class="btn btn-sm btn-info">
+                    👁️ Voir
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center text-muted">
+                Aucun élève enregistré dans cette classe
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'accueil' %}" class="btn btn-secondary mt-3">
+    ⬅ Retour à l’accueil
+</a>
+
+{% endblock %}
+
+

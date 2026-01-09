@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Collège{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h2 class="text-white mb-4">Classes du Collège</h2>
+    <div class="row">
+        {% for classe in classes %}
+        <div class="col-md-4 mb-3">
+            <div class="card bg-dark text-white shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ classe.nom }}</h5>
+                    <a href="{% url 'liste_eleves' classe.id %}" class="btn btn-success btn-sm mt-2">Voir les élèves</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center text-white">Aucune classe enregistrée</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

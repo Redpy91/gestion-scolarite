@@ -1,0 +1,134 @@
+{% extends 'core/base.html' %}
+{% load dict_filters %}
+
+{% block title %}Détails de l'élève{% endblock %}
+
+{% block content %}
+
+<!-- 🔹 INFOS ÉLÈVE -->
+<div class="card mb-4 bg-dark text-white">
+    <div class="card-header">
+        <h4>{{ eleve.nom }} {{ eleve.prenom }}</h4>
+    </div>
+    <div class="card-body row">
+        <div class="col-md-6">
+            <p><strong>Classe :</strong> {{ eleve.classe.nom }}</p>
+            <p><strong>Semestre :</strong> Semestre {{ semestre }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Date de naissance :</strong> {{ eleve.date_naissance }}</p>
+            <p><strong>Lieu de naissance :</strong> {{ eleve.lieu_naissance }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- 🔹 SÉLECTION DU SEMESTRE -->
+<form method="get" class="mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <label class="fw-bold">Semestre :</label>
+        <select name="semestre"
+                class="form-select w-auto"
+                onchange="this.form.submit()">
+            <option value="1" {% if semestre == 1 %}selected{% endif %}>Semestre 1</option>
+            <option value="2" {% if semestre == 2 %}selected{% endif %}>Semestre 2</option>
+        </select>
+    </div>
+</form>
+
+<!-- 🔹 TABLEAU DES NOTES -->
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        📘 Notes par matière
+
+
+         <div class="d-flex gap-2">
+            <a href="{% url 'ajouter_note' eleve.id %}?semestre={{ semestre }}"
+               class="btn btn-primary btn-sm">
+                ➕ Ajouter une note
+            </a>
+
+            <a href="{% url 'bulletin_pdf' eleve.id %}?semestre={{ semestre }}"
+               class="btn btn-success btn-sm">
+                📄 Bulletin
+            </a>
+        </div>
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="card-body table-responsive">
+        <table class="table table-bordered table-dark text-center align-middle">
+            <thead class="table-secondary text-dark">
+                <tr>
+                    <th>Matière</th>
+                    <th>Coef</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                    <th>I3</th>
+                    <th>D1</th>
+                    <th>D2</th>
+                    <th>D3</th>
+                    <th>Comp.</th>
+                    <th>Note classe</th>
+                    <th>Action</th>
+                    <th>Moyenne</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for matiere in matieres %}
+                {% with stats=moyennes_matieres|dict_get:matiere.id %}
+                <tr>
+                    <td>{{ matiere.get_nom_display }}</td>
+
+                    <!-- Coef -->
+                    <td>{{ stats.coef|default:"—" }}</td>
+
+                    <!-- NOTES PAR TYPE (FILTRÉES PAR SEMESTRE) -->
+                    {% for eval in evaluations %}
+                        <td>
+                            {% for note in notes_semestre %}
+                                {% if note.matiere_id == matiere.id and note.type_note == eval %}
+                                    {{ note.valeur }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    {% endfor %}
+
+                    <!-- NOTE DE CLASSE -->
+                    <td>{{ stats.note_classe|default:"—" }}</td>
+
+                    <!-- ACTION : MODIFIER NOTE -->
+                <td>
+                    <a href="{% url 'modifier_notes' eleve.id matiere.id %}?semestre={{ semestre }}"
+                    class="btn btn-warning btn-sm">
+                        ✏️ Modifier
+                    </a>
+                </td>
+                    <!-- MOYENNE -->
+                    <td><strong>{{ stats.moyenne|default:"—" }}</strong></td>
+                </tr>
+                {% endwith %}
+            {% empty %}
+                <tr>
+                    <td colspan="11">Aucune matière enregistrée</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<a href="{% url 'accueil' %}" class="btn btn-secondary">
+    ⬅ Retour à l’accueil
+</a>
+
+{% endblock %}
