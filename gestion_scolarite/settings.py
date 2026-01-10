@@ -11,10 +11,15 @@ SECRET_KEY = os.environ.get(
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'gestion-scolarite.onrender.com',
-    'localhost',
-    '127.0.0.1',
+    "localhost",
+    "127.0.0.1",
+    ".onrender.com",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
