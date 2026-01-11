@@ -117,7 +117,7 @@ def ajouter_eleve(request, classe_id):
         p.drawString(3*cm, height - 7*cm, f"Matricule : {matricule}")
         p.drawString(3*cm, height - 8*cm, f"Mot de passe temporaire : {password}")
 
-        p.drawString(3*cm, height - 10*cm, "⚠ Veuillez changer le mot de passe dès la première connexion.")
+        p.drawString(3*cm, height - 10*cm, "⚠ Veuillez utiliser votre matricule et le mot de passe pour vous connectez.")
 
         p.showPage()
         p.save()
