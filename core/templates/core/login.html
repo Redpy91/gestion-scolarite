@@ -19,7 +19,7 @@
             padding: 15px;
         }
 
-        /* Animation d’entrée */
+        /* Carte login + animation */
         .login-form {
             background-color: #1c1c1c;
             padding: 30px;
@@ -39,6 +39,17 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        /* LOGO ROND */
+        .login-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #28a745;
+            box-shadow: 0 0 12px rgba(40, 167, 69, 0.4);
+            margin-bottom: 15px;
         }
 
         .login-form input {
@@ -84,9 +95,16 @@
 </head>
 <body>
 
-<div class="login-form">
+<div class="login-form text-center">
 
-    <h3 class="text-center mb-4">Connexion</h3>
+    <!-- LOGO ROND -->
+    <img
+        src="{% static 'images/logo.png' %}"
+        alt="Logo"
+        class="login-logo"
+    >
+
+    <h3 class="mb-4">Connexion</h3>
 
     {% if messages %}
         {% for message in messages %}
@@ -99,7 +117,7 @@
     <form method="POST" onsubmit="showLoader()">
         {% csrf_token %}
 
-        <div class="mb-3">
+        <div class="mb-3 text-start">
             <input
                 type="text"
                 name="username"
@@ -110,7 +128,7 @@
             >
         </div>
 
-        <div class="mb-2">
+        <div class="mb-2 text-start">
             <input
                 type="password"
                 name="password"
@@ -120,7 +138,6 @@
             >
         </div>
 
-        <!-- Mot de passe oublié -->
         <div class="text-end mb-3">
             <a href="#" class="forgot-link">
                 Mot de passe oublié ?
